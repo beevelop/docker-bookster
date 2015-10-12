@@ -25,9 +25,8 @@ mongo:
 # Bookster
 bookster:
   build: .
-#  image: beevelop/bookster
   environment:
-    - VIRTUAL_HOST=lab.bee.pw
+    - VIRTUAL_HOST=bookster.example.com
     - VIRTUAL_PORT=8080
   links:
     - mongo:mongo
