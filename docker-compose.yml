@@ -1,0 +1,38 @@
+# Central Volumes Image
+volumes:
+  image: tianon/true
+  volumes:
+    # Bookster
+    - "./uploads/:/opt/Bookster/uploads "
+    # Mongo-Data
+    - "./db/:/data/db"
+
+# Central NGINX-Proxy
+proxy:
+  image: jwilder/nginx-proxy
+  ports:
+    - "80:80"
+  volumes:
+    - "/var/run/docker.sock:/tmp/docker.sock:ro"
+  restart: always
+
+# Database
+mongo:
+  image: mongo
+  volumes_from:
+    - "volumes"
+
+# Bookster
+bookster:
+  build: .
+#  image: beevelop/bookster
+  environment:
+    - VIRTUAL_HOST=lab.bee.pw
+    - VIRTUAL_PORT=8080
+  links:
+    - mongo:mongo
+  expose:
+    - "8080"
+  volumes_from:
+    - "volumes"
+  restart: always
